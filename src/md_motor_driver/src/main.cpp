@@ -5,12 +5,21 @@
 #include "md_motor_interface_msgs/msg/md_robot_msg1.hpp"
 #include "md_motor_interface_msgs/msg/md_robot_msg2.hpp"
 #include "md_motor_interface_msgs/msg/pose.hpp"
-//Message 패키지 만들때는 대문자 시작, 카멜케이스 하라더니만, 
-//idl이 만들어주는건 다 소문자에 스네이크 케이스로 만들어주노
+//    .hpp 헤더 경로는 소문자 + 스네이크케이스
+//   내부 타입은 원래 .msg 파일 이름과 동일한 CamelCase
+//이는 rosidl 빌드시 자동 생성되는 규칙이니 그대로 따라가면 됨.
 
 #include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <queue>
+
+using md_motor_interface_msgs::msg::MdRobotMsg1;
+using md_motor_interface_msgs::msg::MdRobotMsg2;
+
+MdRobotMsg1 md_robot_msg_pid_pnt_main_data;
+MdRobotMsg2 md_robot_msg_pid_robot_monitor;
+
+ROBOT_PARAMETER_t robotParamData;
 
 int main(int argc, char ** argv)
 {

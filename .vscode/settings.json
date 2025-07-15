@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "queue": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "chrono": "cpp"
     }
 }
