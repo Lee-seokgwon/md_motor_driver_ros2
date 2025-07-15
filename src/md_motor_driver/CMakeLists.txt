@@ -15,8 +15,7 @@ find_package(nav_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(md_motor_interface_msgs REQUIRED)  # MD custom ros interface package
-#Serial package must be added after testing the library
-#Serial package must be added after testing the library
+find_package(Boost REQUIRED COMPONENTS system) #Boost lib for Boost::asio
 
 # include 디렉토리 추가
 include_directories(
@@ -30,6 +29,7 @@ add_executable(md_motor_driver_node
   src/main.cpp
   src/com.cpp
   src/robot.cpp
+  src/SerialComm.cpp
 )
 
 # 의존성 연결
@@ -42,6 +42,11 @@ ament_target_dependencies(md_motor_driver_node
   tf2
   tf2_ros
   md_motor_interface_msgs
+)
+
+#for Boost::asio
+target_link_libraries(md_motor_driver_node
+  Boost::system
 )
 
 #설치를 해야 ROS2 시스템이 이 바이너리를 인식하고 ros2 run, ros2 launch 등에 사용할 수 있음

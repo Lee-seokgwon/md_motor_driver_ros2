@@ -21,6 +21,50 @@ MdRobotMsg2 md_robot_msg_pid_robot_monitor;
 
 ROBOT_PARAMETER_t robotParamData;
 
+SETTINNG_PARAM_STEP_t byCntInitStep;
+uint16_t byCntComStep;
+uint32_t velCmdUpdateCount;
+uint32_t velCmdRcvCount;
+uint32_t pid_response_receive_count;
+uint32_t pid_request_cmd_vel_count;
+volatile bool mdui_mdt_connection_state;
+volatile bool remote_pc_connection_state;
+
+INIT_SETTING_STATE_t fgInitsetting;
+uint16_t check_connection_retry_count;
+
+double goal_cmd_speed;             // m/sec
+double goal_cmd_ang_speed;         // radian/sec
+bool reset_pos_flag;
+bool reset_alarm_flag;
+
+extern PID_ROBOT_MONITOR_t curr_pid_robot_monitor;
+extern PID_PNT_MAIN_DATA_t curr_pid_pnt_main_data;
+
+extern int InitSerialComm(void);
+extern int16_t * RobotSpeedToRPMSpeed(double linear, double angular);
+
+std::string serial_port;
+
+
+void PubRobotRPMMessage(void)               // This is the message used by default
+{
+    return;
+}
+
+void PubRobotOdomMessage(void)             // Use only when using MDUI
+{
+    return;
+}
+
+
+
+
+
+
+
+
+// test logging code
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);

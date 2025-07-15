@@ -13,6 +13,9 @@
   <depend>std_msgs</depend>
   <depend>md_robot_interface_msgs</depend>
 
+  <build_depend>libboost-system-dev</build_depend> <!--boost lib for boost::asio-->
+  <exec_depend>libboost-system-dev</exec_depend>
+
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
