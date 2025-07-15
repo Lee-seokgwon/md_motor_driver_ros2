@@ -16,3 +16,5 @@
 #include <iostream>
 #include <cfloat>
 #include <cmath>
+
+using namespace std;
