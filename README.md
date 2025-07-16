@@ -19,6 +19,7 @@ cd md
 git clone https://github.com/Lee-seokgwon/md_motor_driver_ros2.git
 
 # 빌드
+cd md_motor_driver_ros2
 colcon build --symlink-install
 
 # 환경 설정
