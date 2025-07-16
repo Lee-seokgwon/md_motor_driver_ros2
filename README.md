@@ -1,7 +1,7 @@
 # 🦾 MD 모터 드라이버 ROS 2 패키지 (Prototyping)
 
-##본 패키지의 원본 (ROS1 버전의 MD ROS드라이버)의 저작권은 MDROBOT 사에 있습니다.
-##https://www.mdrobot.co.kr/
+## 본 패키지의 원본 (ROS1 버전의 MD ROS드라이버)의 저작권은 MDROBOT 사에 있습니다.
+## https://www.mdrobot.co.kr/
 
 본 패키지는 MD 시리즈 모터 드라이버를 ROS 2 (Humble) 환경에서 제어할 수 있도록 포팅한 **프로토타입 버전**입니다.  
 ⚠️ **아직 실제 하드웨어 연동 및 검증은 진행되지 않았습니다.**
