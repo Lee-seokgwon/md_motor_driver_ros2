@@ -7,6 +7,14 @@
 
 ---
 
+
+## 개발환경
+
+- OS: Ubuntu 22.04 (⚠️ Boost::asio 사용을 위해 **WSL/VM보다는 네이티브 우분투** 권장)
+- ROS 2 Humble
+- C++17
+- Boost.Asio (libboost-system-dev)
+
 ## 🚀 실행 방법
 
 ```bash
