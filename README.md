@@ -32,7 +32,7 @@ ros2 launch md_motor_driver md_robot_node_launch.py
 ## ⚙️ 파라미터 수정 방법
 
 ```bash
-cd ~/md/md_motor_driver_ros2/src/md_motor_driver/md_motor_driver/launch
+cd ~/md/md_motor_driver_ros2/src/md_motor_driver/launch
 gedit md_robot_node_launch.py
 ```
 
@@ -46,6 +46,13 @@ gedit md_robot_node_launch.py
 'maxrpm': 1000,
 'use_MDUI': 0,
 ...
+```
+
+파라미터 수정후 재빌드
+```bash
+cd ~/md/md_motor_driver_ros2
+colcon build --symlink-install
+source install/setup.bash
 ```
 
 📌 주의 사항
