@@ -3,15 +3,20 @@
 <package format="3">
   <name>md_motor_driver</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Apache-2.0</description>
   <maintainer email="pddj21@knu.ac.kr">ddokkon</maintainer>
-  <license>TODO: License declaration</license>
+  <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
-  <depend>md_robot_interface_msgs</depend>
+  <depend>md_motor_interface_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
 
   <build_depend>libboost-system-dev</build_depend> <!--boost lib for boost::asio-->
   <exec_depend>libboost-system-dev</exec_depend>

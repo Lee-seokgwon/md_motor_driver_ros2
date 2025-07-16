@@ -10,7 +10,7 @@ def generate_launch_description():
             output='screen',
             parameters=[{
                 'use_MDUI': 0,
-                'serial_port': 'ttyUSB0',
+                'serial_port': '/dev/ttyUSB0',
                 'serial_baudrate': 57600,
                 'wheel_radius': 0.0935,
                 'wheel_length': 0.454,

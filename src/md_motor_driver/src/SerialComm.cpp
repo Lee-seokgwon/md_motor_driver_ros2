@@ -1,51 +1,78 @@
 // SerialComm.cpp
 #include "md_motor_driver/SerialComm.hpp"
+#include <boost/asio/serial_port_base.hpp>
 #include <iostream>
 #include <sys/ioctl.h>
-#include <unistd.h>
 
-SerialComm::SerialComm() : serial_(io_) {}
-
-SerialComm::~SerialComm() {
-    if (serial_.is_open()) serial_.close();
+SerialComm::SerialComm()
+: serial_(io_)
+{
 }
 
-bool SerialComm::open(const std::string& port, unsigned int baudrate) {
-    boost::system::error_code ec;
-    serial_.open(port, ec);
-    if (ec) {
-        std::cerr << "Failed to open port: " << ec.message() << std::endl;
+SerialComm::~SerialComm()
+{
+    if (serial_.is_open()) {
+        serial_.close();
+    }
+}
+
+bool SerialComm::open(const std::string& port, unsigned int baudrate)
+{
+    try {
+        serial_.open(port);
+        serial_.set_option(boost::asio::serial_port_base::baud_rate(baudrate));
+        serial_.set_option(boost::asio::serial_port_base::character_size(8));
+        serial_.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
+        serial_.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
+        serial_.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
+        return true;
+    } catch (boost::system::system_error& e) {
+        std::cerr << "[SerialComm] Failed to open serial port: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+bool SerialComm::write(const uint8_t* data, size_t length)
+{
+    if (!serial_.is_open()) {
         return false;
     }
 
-    serial_.set_option(boost::asio::serial_port_base::baud_rate(baudrate));
-    serial_.set_option(boost::asio::serial_port_base::character_size(8));
-    serial_.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
-    serial_.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
-    serial_.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
-
-    return true;
+    try {
+        size_t bytes_written = boost::asio::write(serial_, boost::asio::buffer(data, length));
+        return bytes_written == length;
+    } catch (boost::system::system_error& e) {
+        std::cerr << "[SerialComm] Write error: " << e.what() << std::endl;
+        return false;
+    }
 }
 
-bool SerialComm::writeData(const uint8_t* data, size_t length) {
-    boost::system::error_code ec;
-    boost::asio::write(serial_, boost::asio::buffer(data, length), ec);
-    return !ec;
+size_t SerialComm::read(uint8_t* buffer, size_t max_length)
+{
+    if (!serial_.is_open()) {
+        return 0;
+    }
+
+    try {
+        return serial_.read_some(boost::asio::buffer(buffer, max_length));
+    } catch (boost::system::system_error& e) {
+        std::cerr << "[SerialComm] Read error: " << e.what() << std::endl;
+        return 0;
+    }
 }
 
-size_t SerialComm::readData(uint8_t* buffer, size_t max_length) {
-    boost::system::error_code ec;
-    return serial_.read_some(boost::asio::buffer(buffer, max_length), ec);
-}
-
-bool SerialComm::isOpen() const {
+bool SerialComm::isOpen() const
+{
     return serial_.is_open();
 }
 
-size_t SerialComm::available(){
-    int bytes_available = 0;
-    if (serial_.is_open()) {
-        ioctl(serial_.native_handle(), FIONREAD, &bytes_available);
+size_t SerialComm::available()
+{
+    if (!serial_.is_open()) {
+        return 0;
     }
+
+    int bytes_available = 0;
+    ioctl(serial_.native_handle(), FIONREAD, &bytes_available);
     return static_cast<size_t>(bytes_available);
 }

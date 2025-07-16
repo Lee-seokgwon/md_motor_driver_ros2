@@ -26,10 +26,9 @@ include_directories(
 #바이너리는 main.cpp, com.cpp, robot.cpp를 컴파일해서 만들어라
 #.hpp(헤더)는 포함할 필요 없음 — 컴파일러가 #include를 통해 자동 탐지
 add_executable(md_motor_driver_node
-  src/main.cpp
-  src/com.cpp
-  src/robot.cpp
+  src/md_motor_driver_node.cpp
   src/SerialComm.cpp
+  src/main.cpp
 )
 
 # 의존성 연결

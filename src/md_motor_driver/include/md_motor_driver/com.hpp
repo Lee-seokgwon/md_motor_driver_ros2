@@ -1,5 +1,7 @@
+// com.hpp
 #pragma once
 #include <cstdint>
+#include <string>
 
 #define ID_ALL                      0xfe
 #define MAX_PACKET_SIZE             128
@@ -7,6 +9,7 @@
 #define REQUEST_PNT_MAIN_DATA       2
 #define REQUEST_PID_ROBOT_MONITOR   3
 #define CMD_ALARM_RESET             8
+#define MAX_CONNECTION_CHECK_COUNT  10
 
 #define MID_MDUI                    184
 #define MID_MDT                     183
@@ -250,11 +253,5 @@ typedef struct {
     int nMaxRPM;
     int nSlowstart;
     int nSlowdown;
+    std::string serial_port;
 } ROBOT_PARAMETER_t;
-
-// -------------------- Extern declarations --------------------
-extern ROBOT_PARAMETER_t robotParamData;
-
-extern int InitSerial(void);
-extern int PutMdData(PID_CMD_t pid, uint16_t rmid, const uint8_t *pData, uint16_t length);
-extern int ReceiveSerialData(void);
