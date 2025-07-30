@@ -39,6 +39,7 @@ using namespace std;
 #define PID_POSI_RESET      13
 #define PID_VEL_CMD         130
 #define PID_MAIN_DATA       193
+#define PID_PNT_VEL_CMD     207
 
 #define MAX_PACKET_SIZE     26
 #define MAX_DATA_SIZE       23

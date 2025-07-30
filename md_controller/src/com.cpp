@@ -126,6 +126,27 @@ int PutMdData(BYTE byPID, BYTE byMID, int id_num, int nArray[])
             // printf("send data : ");
             // for(int k = 0; k < byPidDataSize; k++) printf("%d ", Com.bySndBuf[k]); cout << endl;
             break;
+        
+        case PID_PNT_VEL_CMD:
+            byDataSize = 7;
+            byPidDataSize = 13;  // 헤더(5) + 데이터(7) + 체크섬(1)
+            byTempDataSum = 0;
+            
+            Com.bySndBuf[4] = byDataSize;
+            Com.bySndBuf[5] = nArray[0];   // D1: ID1 ENABLE
+            Com.bySndBuf[6] = nArray[1];   // D2: ID1 RPM Low
+            Com.bySndBuf[7] = nArray[2];   // D3: ID1 RPM High
+            Com.bySndBuf[8] = nArray[3];   // D4: ID2 ENABLE
+            Com.bySndBuf[9] = nArray[4];   // D5: ID2 RPM Low
+            Com.bySndBuf[10] = nArray[5];  // D6: ID2 RPM High
+            Com.bySndBuf[11] = nArray[6];  // D7: 리턴 데이터 요청
+
+            for(i = 0; i < (byPidDataSize-1); i++) byTempDataSum += Com.bySndBuf[i];
+                Com.bySndBuf[byPidDataSize-1] = ~(byTempDataSum) + 1; //check sum
+    
+            ser.write(Com.bySndBuf, byPidDataSize);
+
+            break;
     }
     
     return SUCCESS;

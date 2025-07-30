@@ -7,11 +7,12 @@ geometry_msgs::msg::TransformStamped odom_tf;
 sensor_msgs::msg::JointState joint_states;
 
 BYTE SendCmdRpm = OFF;
-int rpm_ = 0;
+int left_rpm_ = 0;
+int right_rpm_ = 0;
 
-void CmdRpmCallBack(const std_msgs::msg::Int32::SharedPtr msg) {
-    rpm_ = msg->data;
-
+void CmdRpmCallBack(const std_msgs::msg::Int32::SharedPtr msg) { //change to sub /cmd_vel and add logic linear,angular -> left rpm, right rmp , apply inner
+    left_rpm_ = msg->data;
+    right_rpm_ = msg->data;
     SendCmdRpm = ON;
 }
 
@@ -29,9 +30,9 @@ int main(int argc, char *argv[]) {
     //Motor driver settup-------------------------------------------------------------------------------
     node->declare_parameter("MDUI", 184);
     node->declare_parameter("MDT", 183);
-    node->declare_parameter("Port", "/dev/ttyUSB0");
+    node->declare_parameter("Port", "/dev/ttyMotor");
     node->declare_parameter("Baudrate", 57600);
-    node->declare_parameter("ID", 1);
+    node->declare_parameter("ID", 1); //fix
     node->declare_parameter("GearRatio", 15);
     node->declare_parameter("poles", 10);
 
@@ -46,8 +47,9 @@ int main(int argc, char *argv[]) {
     Motor.PPR       = Motor.poles*3*Motor.GearRatio;           //poles * 3(HALL U,V,W) * gear ratio
     Motor.Tick2RAD  = (360.0/Motor.PPR)*PI / 180;
 
-    IByte iData;
-    int nArray[2];
+    IByte iData, left_iData, right_iData; //left_iData, right_iData for dual motor
+
+    int nArray[20];
     static BYTE fgInitsetting, byCntInitStep, byCntComStep, byCnt2500us, byCntStartDelay, byCntCase[5];
     
     byCntInitStep     = 1;
@@ -69,7 +71,7 @@ int main(int argc, char *argv[]) {
             {
                 switch(++byCntComStep)
                 {
-                case 1:{ //create tf & update motor position
+                case 1:{ //create tf & update motor position //maybe not needed. change this logic to get odom
                     geometry_msgs::msg::TransformStamped transformStamped;
                     transformStamped.header.stamp = node->now();
                     transformStamped.header.frame_id = "world";
@@ -104,10 +106,18 @@ int main(int argc, char *argv[]) {
 
                         if(SendCmdRpm)
                         {
-                            iData = Short2Byte(rpm_ * Motor.GearRatio); // #1,2 Wheel RPM
-                            nArray[0] = iData.byLow;
-                            nArray[1] = iData.byHigh;
-                            PutMdData(PID_VEL_CMD, Com.nIDMDT, Motor.ID, nArray);
+                            left_iData = Short2Byte(left_rpm_ * Motor.GearRatio); // #1,2 Wheel RPM
+                            right_iData = Short2Byte(right_rpm_ * Motor.GearRatio);
+
+                            nArray[0] = 1; //left motor enable
+                            nArray[1] = left_iData.byLow; //left motor rpm (lower 8bits)
+                            nArray[2] = left_iData.byHigh; //left motor rpm (higher 8bits)
+                            nArray[3] = 1; //right motor enable
+                            nArray[4] = right_iData.byLow; //right motor rpm (lower 8bits)
+                            nArray[5] = right_iData.byHigh; //right motor rpm (higher 8bits)
+                            nArray[6] = 0; //no return data
+
+                            PutMdData(PID_PNT_VEL_CMD, Com.nIDMDT, Motor.ID, nArray); //dual channel motor controller -> pid 207 (md ros manual)
 
                             //n대의 모터드라이버에게 동시에 main data를 요청할 경우 data를 받을 때 데이터가 섞임을 방지.
                             nArray[0] = PID_MAIN_DATA;
