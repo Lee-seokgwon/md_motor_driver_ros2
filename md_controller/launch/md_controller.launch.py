@@ -26,7 +26,7 @@ def generate_launch_description():
 
   declare_use_rviz_cmd = DeclareLaunchArgument(
     name='use_rviz',
-    default_value='True',
+    default_value='False',
     description='Whether to start RVIZ')
   
   # Launch motor driver controller
@@ -36,9 +36,9 @@ def generate_launch_description():
     parameters=[{
       "MDUI":184,
       "MDT":183,
-      "Port":"/dev/ttyUSB0",
+      "Port":"/dev/ttyMotor",
       "Baudrate":57600,
-      "ID":2,
+      "ID":1,
       "GearRatio":25,
       "poles":8
     }],
