@@ -1,4 +1,7 @@
 #include "md_controller/com.hpp"
+#include "md_controller/kinematics.hpp"
+
+#include "geometry_msgs/msg/twist.hpp"
 
 Communication Com;  
 MotorVar Motor;
@@ -10,9 +13,11 @@ BYTE SendCmdRpm = OFF;
 int left_rpm_ = 0;
 int right_rpm_ = 0;
 
-void CmdRpmCallBack(const std_msgs::msg::Int32::SharedPtr msg) { //change to sub /cmd_vel and add logic linear,angular -> left rpm, right rmp , apply inner
-    left_rpm_ = msg->data;
-    right_rpm_ = msg->data;
+void CmdVelCallBack(const geometry_msgs::msg::Twist::SharedPtr msg) {
+    // cmd_vel에서 linear.x와 angular.z 추출
+    float linear_x = msg->linear.x;   // 직진 속도 (m/s)
+    float angular_z = msg->angular.z; // 회전 속도 (rad/s)
+    cmdVelToRpm(linear_x, angular_z, left_rpm_, right_rpm_); //convert /cmd_vel to left_rpm_ , right_rpm_
     SendCmdRpm = ON;
 }
 
@@ -25,7 +30,7 @@ int main(int argc, char *argv[]) {
     tf2_ros::TransformBroadcaster tf_broadcaster_(node);
 
     //subscriber
-    auto rpm_sub = node->create_subscription<std_msgs::msg::Int32>("/cmd_rpm",1000, CmdRpmCallBack);
+    auto cmd_vel_sub = node->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel", 10, CmdVelCallBack);
 
     //Motor driver settup-------------------------------------------------------------------------------
     node->declare_parameter("MDUI", 184);
@@ -35,6 +40,8 @@ int main(int argc, char *argv[]) {
     node->declare_parameter("ID", 1); //fix
     node->declare_parameter("GearRatio", 15);
     node->declare_parameter("poles", 10);
+    node->declare_parameter("wheel_radius", 0.033);
+    node->declare_parameter("wheel_base", 0.16);
 
     node->get_parameter("MDUI", Com.nIDMDUI);
     node->get_parameter("MDT", Com.nIDMDT);
@@ -43,6 +50,12 @@ int main(int argc, char *argv[]) {
     node->get_parameter("ID", Motor.ID);
     node->get_parameter("GearRatio", Motor.GearRatio);
     node->get_parameter("poles", Motor.poles);
+
+    //Robot Param load for kinematics.cpp
+    float wheel_radius_param, wheel_base_param;
+    node->get_parameter("wheel_radius", wheel_radius_param);
+    node->get_parameter("wheel_base", wheel_base_param);
+    setRobotParams(wheel_radius_param, wheel_base_param);
 
     Motor.PPR       = Motor.poles*3*Motor.GearRatio;           //poles * 3(HALL U,V,W) * gear ratio
     Motor.Tick2RAD  = (360.0/Motor.PPR)*PI / 180;

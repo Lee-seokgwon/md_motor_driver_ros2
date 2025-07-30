@@ -30,7 +30,7 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
-add_executable(md_controller src/md_controller.cpp src/com.cpp)
+add_executable(md_controller src/md_controller.cpp src/com.cpp src/kinematics.cpp)
 ament_target_dependencies(md_controller rclcpp std_msgs serial geometry_msgs tf2_ros tf2 sensor_msgs)
 install(TARGETS
   md_controller

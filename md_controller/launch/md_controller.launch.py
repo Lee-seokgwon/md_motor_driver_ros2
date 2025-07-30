@@ -40,7 +40,9 @@ def generate_launch_description():
       "Baudrate":57600,
       "ID":1,
       "GearRatio":25,
-      "poles":8
+      "poles":8,
+      "wheel_radius": 0.103,
+      "wheel_base": 0.4
     }],
     output='screen'
   )
