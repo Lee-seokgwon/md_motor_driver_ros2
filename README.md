@@ -8,7 +8,7 @@ This is a package that makes MDROBOT's motor driver available in ROS2(humble). [
 ---
 
 ## ✅ 지원되는 모터 드라이버
-
+- 본코드는 MDrobot의 듀얼채널 모터드라이버를 지원합니다.
 - `md200t`
 - `md400t`
 
@@ -17,7 +17,7 @@ This is a package that makes MDROBOT's motor driver available in ROS2(humble). [
 ## 🧪 테스트 환경
 
 - `md200t` + `mdh80`
-- `md400t` + `mdh200`
+- `md400t` + `mdh250`
 
 ## motor driver setup(port, buadrate ...)
 in launch/md_controller.launch.py
