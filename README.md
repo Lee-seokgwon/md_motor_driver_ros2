@@ -30,15 +30,15 @@ This is a package that makes MDROBOT's motor driver available in ROS2(humble). [
 
 ### 💻 동작 흐름 요약
 
-/cmd_vel (linear.x, angular.z)
-↓
-cmdVelToRpm() 변환
-↓
-left, right 모터 RPM 계산
-↓
-MD 모터 드라이버로 전송
-↓
-좌측/우측 바퀴 개별 회전
+/cmd_vel (linear.x, angular.z) <br>
+↓ <br>
+cmdVelToRpm() 변환 <br>
+↓ <br>
+left, right 모터 RPM 계산 <br>
+↓ <br>
+MD 모터 드라이버로 전송 <br>
+↓ <br>
+좌측/우측 바퀴 개별 회전 <br>
 
 ---
 
