@@ -72,7 +72,7 @@ To install it, follow the steps below.
 ## 🚀 실행방법
 
 1. 모터 드라이버 런치 실행
-2. 
+ 
 ```bash
 #run motor controller
         
