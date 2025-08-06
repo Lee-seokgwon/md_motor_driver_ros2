@@ -129,8 +129,8 @@ int main(int argc, char *argv[]) {
                     motor2_enc_pub->publish(motor2_enc_msg);
 
                     // 모터 rpm 값 퍼블리시
-                    std_msgs::msg::Int16 motor1_rpm_msg;
-                    std_msgs::msg::Int16 motor2_rpm_msg;
+                    std_msgs::msg::Int32 motor1_rpm_msg;
+                    std_msgs::msg::Int32 motor2_rpm_msg;
 
                     motor2_rpm_msg.data = Com.motor1_rpm;
                     motor2_rpm_msg.data = Com.motor2_rpm;
