@@ -2,6 +2,7 @@
 #include "md_controller/kinematics.hpp"
 
 #include "geometry_msgs/msg/twist.hpp"
+#include "std_msgs/msg/int32.hpp"  // 추가된 헤더
 
 Communication Com;  
 MotorVar Motor;
@@ -119,8 +120,6 @@ int main(int argc, char *argv[]) {
                     // 모터 엔코더 값 퍼블리시
                     std_msgs::msg::Int32 motor1_enc_msg;
                     std_msgs::msg::Int32 motor2_enc_msg;
-                    std_msgs::msg::Int32 motor1_rpm_msg;
-                    std_msgs::msg::Int32 motor2_rpm_msg;
                     
                     motor1_enc_msg.data = Com.motor1_position;
                     motor2_enc_msg.data = Com.motor2_position;
@@ -128,12 +127,12 @@ int main(int argc, char *argv[]) {
                     motor1_enc_pub->publish(motor1_enc_msg);
                     motor2_enc_pub->publish(motor2_enc_msg);
 
-                    // 모터 rpm 값 퍼블리시
+                    // 모터 rpm 값 퍼블리시 (중복 선언 제거)
                     std_msgs::msg::Int32 motor1_rpm_msg;
                     std_msgs::msg::Int32 motor2_rpm_msg;
 
-                    motor2_rpm_msg.data = Com.motor1_rpm;
-                    motor2_rpm_msg.data = Com.motor2_rpm;
+                    motor1_rpm_msg.data = Com.motor1_rpm;  // 수정: motor1_rpm
+                    motor2_rpm_msg.data = Com.motor2_rpm;  // 수정: motor2_rpm
 
                     motor1_rpm_pub->publish(motor1_rpm_msg);
                     motor2_rpm_pub->publish(motor2_rpm_msg);
