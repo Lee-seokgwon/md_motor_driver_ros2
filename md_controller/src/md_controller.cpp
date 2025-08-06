@@ -35,8 +35,8 @@ int main(int argc, char *argv[]) {
     //publisher (rpm, encoder tick...maybe?)
     auto motor1_enc_pub = node->create_publisher<std_msgs::msg::Int32>("/mdh250_l_en", 10);
     auto motor2_enc_pub = node->create_publisher<std_msgs::msg::Int32>("/mdh250_r_en", 10);
-    auto motor1_rpm_pub = node->create_publisher<std_msgs::msg::Int16>("/mdh250_l_rpm", 10);
-    auto motor2_rpm_pub = node->create_publisher<std_msgs::msg::Int16>("/mdh250_r_rpm", 10);
+    auto motor1_rpm_pub = node->create_publisher<std_msgs::msg::Int32>("/mdh250_l_rpm", 10);
+    auto motor2_rpm_pub = node->create_publisher<std_msgs::msg::Int32>("/mdh250_r_rpm", 10);
 
     //Motor driver settup-------------------------------------------------------------------------------
     node->declare_parameter("MDUI", 184);
