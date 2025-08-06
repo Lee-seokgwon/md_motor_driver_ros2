@@ -119,8 +119,8 @@ int main(int argc, char *argv[]) {
                     // 모터 엔코더 값 퍼블리시
                     std_msgs::msg::Int32 motor1_enc_msg;
                     std_msgs::msg::Int32 motor2_enc_msg;
-                    std_msgs::msg::Int16 motor1_rpm_msg;
-                    std_msgs::msg::Int16 motor2_rpm_msg;
+                    std_msgs::msg::Int32 motor1_rpm_msg;
+                    std_msgs::msg::Int32 motor2_rpm_msg;
                     
                     motor1_enc_msg.data = Com.motor1_position;
                     motor2_enc_msg.data = Com.motor2_position;
