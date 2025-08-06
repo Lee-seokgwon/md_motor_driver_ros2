@@ -32,6 +32,12 @@ int main(int argc, char *argv[]) {
     //subscriber
     auto cmd_vel_sub = node->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel", 10, CmdVelCallBack);
 
+    //publisher (rpm, encoder tick...maybe?)
+    auto motor1_enc_pub = node->create_publisher<std_msgs::msg::Int32>("/mdh250_l_en", 10);
+    auto motor2_enc_pub = node->create_publisher<std_msgs::msg::Int32>("/mdh250_r_en", 10);
+    auto motor1_rpm_pub = node->create_publisher<std_msgs::msg::Int16>("/mdh250_l_rpm", 10);
+    auto motor2_rpm_pub = node->create_publisher<std_msgs::msg::Int16>("/mdh250_r_rpm", 10);
+
     //Motor driver settup-------------------------------------------------------------------------------
     node->declare_parameter("MDUI", 184);
     node->declare_parameter("MDT", 183);
@@ -109,6 +115,27 @@ int main(int argc, char *argv[]) {
                     transformStamped.transform.rotation.w = q.w();
 
                     tf_broadcaster_.sendTransform(transformStamped);
+
+                    // 모터 엔코더 값 퍼블리시
+                    std_msgs::msg::Int32 motor1_enc_msg;
+                    std_msgs::msg::Int32 motor2_enc_msg;
+                    
+                    motor1_enc_msg.data = Com.motor1_position;
+                    motor2_enc_msg.data = Com.motor2_position;
+                    
+                    motor1_enc_pub->publish(motor1_enc_msg);
+                    motor2_enc_pub->publish(motor2_enc_msg);
+
+                    // 모터 rpm 값 퍼블리시
+                    std_msgs::msg::Int16 motor1_rpm_msg;
+                    std_msgs::msg::Int16 motor2_rpm_msg;
+
+                    motor2_rpm_msg.data = Com.motor1_rpm;
+                    motor2_rpm_msg.data = Com.motor2_rpm;
+
+                    motor1_rpm_pub->publish(motor1_rpm_msg);
+                    motor2_rpm_pub->publish(motor2_rpm_msg);
+
                     auto end = std::chrono::high_resolution_clock::now();
                     break;
                 }
@@ -128,7 +155,7 @@ int main(int argc, char *argv[]) {
                             nArray[3] = 1; //right motor enable
                             nArray[4] = right_iData.byLow; //right motor rpm (lower 8bits)
                             nArray[5] = right_iData.byHigh; //right motor rpm (higher 8bits)
-                            nArray[6] = 0; //no return data
+                            nArray[6] = 1; // PID_PNT_MONITOR return
 
                             PutMdData(PID_PNT_VEL_CMD, Com.nIDMDT, Motor.ID, nArray); //dual channel motor controller -> pid 207 (md ros manual)
 

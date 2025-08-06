@@ -127,6 +127,7 @@ int PutMdData(BYTE byPID, BYTE byMID, int id_num, int nArray[])
             // for(int k = 0; k < byPidDataSize; k++) printf("%d ", Com.bySndBuf[k]); cout << endl;
             break;
         
+        //for dual channel motor control
         case PID_PNT_VEL_CMD:
             byDataSize = 7;
             byPidDataSize = 13;  // 헤더(5) + 데이터(7) + 체크섬(1)
@@ -171,6 +172,16 @@ int MdReceiveProc(void) //save the identified serial data to defined variable ac
             Com.position = Byte2LInt(Com.byRcvBuf[15], Com.byRcvBuf[16], Com.byRcvBuf[17], Com.byRcvBuf[18]);
             // printf("%d\n",Com.rpm);
             break;
+        
+        //dual channel motor rpm, encorder tick read (for /odom)
+        case PID_PNT_MONITOR:
+            Com.motor1_rpm = Byte2Short(Com.byRcvBuf[5],Com.byRcvBuf[6]);
+            Com.motor1_position = Byte2LInt(Com.byRcvBuf[8],Com.byRcvBuf[9],Com.byRcvBuf[10],Com.byRcvBuf[11]);
+
+            Com.motor2_rpm = Byte2Short(Com.byRcvBuf[12],Com.byRcvBuf[13]);
+            Com.motor2_position = Byte2LInt(Com.byRcvBuf[15],Com.byRcvBuf[16],Com.byRcvBuf[17],Com.byRcvBuf[18]);
+            break;
+
     }
 
     return SUCCESS;
