@@ -5,8 +5,8 @@
 #define PI 3.14159265359
 #endif
 
-float wheel_radius = 0.103;  // default 바퀴 반지름 (m)  
-float wheel_base = 0.4;     // default 좌우 바퀴 간격 (m)
+float wheel_radius = 0.0535;  // default 바퀴 반지름 (m), mdh250 = 0.103, mdh80=0.0535  
+float wheel_base = 0.35;     // default 좌우 바퀴 간격 (m)
 
 void setRobotParams(float radius, float base)
 {
