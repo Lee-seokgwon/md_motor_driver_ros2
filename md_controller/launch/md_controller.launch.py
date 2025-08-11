@@ -41,8 +41,8 @@ def generate_launch_description():
       "ID":1,
       "GearRatio":25,
       "poles":8,
-      "wheel_radius": 0.103,
-      "wheel_base": 0.4
+      "wheel_radius": 0.0535,
+      "wheel_base": 0.35
     }],
     output='screen'
   )
